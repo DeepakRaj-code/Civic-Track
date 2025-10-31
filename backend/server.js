@@ -4,17 +4,19 @@ import user from './models/user.js'
 import admin from './models/admin.js'
 import issue from './models/issues.js'
 import multer from 'multer'
-import path from 'path'
 import dotenv from "dotenv";
+import path from "path";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
 
-dotenv.config();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+dotenv.config({ path: path.join(__dirname, ".env") });
 const app = express()
 const port = 3000
 
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-}).then(() => console.log('✅ Connected to MongoDB Atlas'))
+mongoose.connect(process.env.MONGO_URI).then(() => console.log('✅ Connected to MongoDB Atlas'))
   .catch(err => console.error('❌ MongoDB Connection Error:', err));
 
 app.use(express.json())
