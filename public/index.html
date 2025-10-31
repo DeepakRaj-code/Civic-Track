@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CivicTrack</title>
+    <style>
+        :root {
+            --primary: #1e293b;
+            --secondary: #334155;
+            --accent: #3b82f6;
+            --bg: #f1f5f9;
+            --text: #111827;
+            --white: #fff;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        header {
+            background-color: var(--primary);
+            color: var(--white);
+            text-align: center;
+            padding: 1em 0;
+            font-size: 1.6rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            opacity: 0;
+            animation: fadeDown 1s ease forwards;
+        }
+
+        @keyframes fadeDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        main {
+            display: flex;
+            height: calc(100vh - 70px);
+            animation: fadeIn 1.2s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Sidebar */
+        .sec1 {
+            flex: 1;
+            background-color: var(--secondary);
+            color: var(--white);
+            padding: 1em;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1em;
+            min-width: 200px;
+            transition: 0.3s;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        }
+
+        .sec1 button {
+            width: 100%;
+            padding: 0.9em;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            background-color: var(--accent);
+            color: var(--white);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .sec1 button:hover {
+            background-color: #2563eb;
+            transform: scale(1.05);
+            box-shadow: 0 0 12px rgba(59,130,246,0.5);
+        }
+
+        /* Main Content */
+        .sec2 {
+            flex: 5;
+            background-color: var(--bg);
+            padding: 1.5em;
+            overflow-y: auto;
+        }
+
+        /* Issue Cards */
+        .container {
+            background-color: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            margin: 1.2em auto;
+            padding: 1.2em;
+            max-width: 1000px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: slideUp 0.6s ease forwards;
+        }
+
+        @keyframes slideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .information {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-start;
+            gap: 1em;
+        }
+
+        .information img {
+            width: 180px;
+            height: 130px;
+            object-fit: cover;
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        .information img:hover {
+            transform: scale(1.03);
+        }
+
+        .sec211 {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6em;
+        }
+
+        .profile {
+            font-weight: bold;
+            color: var(--accent);
+        }
+
+        .alignment {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 1em;
+        }
+
+        .details {
+            flex: 1;
+            min-width: 220px;
+        }
+
+        .description {
+            flex: 1;
+            background: #f8fafc;
+            padding: 0.8em;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            transition: background 0.3s;
+        }
+
+        .description:hover {
+            background: #e2e8f0;
+        }
+
+        .datetime {
+            margin-top: 0.8em;
+            font-size: 0.9rem;
+            color: #6b7280;
+            text-align: right;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            main {
+                flex-direction: column;
+            }
+
+            .sec1 {
+                flex-direction: row;
+                justify-content: space-around;
+                min-width: 100%;
+                box-shadow: none;
+                border-bottom: 2px solid #e2e8f0;
+            }
+
+            .sec1 button {
+                width: 32%;
+                font-size: 0.9rem;
+            }
+
+            .information img {
+                width: 100%;
+                height: auto;
+            }
+
+            .alignment {
+                flex-direction: column;
+            }
+
+            .details, .description {
+                width: 100%;
+            }
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        @media (max-width: 415px) {
+            .sec1 button{
+                font-size: 0.7rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>🌆 Welcome to CivicTrack</header>
+
+    <main>
+        <section class="sec1">
+            <button onclick="see('all')">View All Posts</button>
+            <button onclick="see1()">View All Submissions</button>
+            <button onclick="see1()">Add New Post</button>
+        </section>
+
+        <section class="sec2" id="contentArea">
+            <p style="text-align:center;">Loading issues...</p>
+        </section>
+    </main>
+
+    <script>
+        async function see(type) {
+            const content = document.getElementById("contentArea");
+            content.innerHTML = `<p style="text-align:center;">Loading ${type} issues...</p>`;
+            try {
+                const response = await fetch("/api/issues");
+                const issues = await response.json();
+
+                const filteredIssues = issues
+                    .filter(i => i.status === "accepted")
+                    .sort((a, b) => new Date(b.date) - new Date(a.date));
+
+                if (!filteredIssues.length) {
+                    content.innerHTML = `<p style="text-align:center;">No accepted posts found.</p>`;
+                    return;
+                }
+
+                displayIssues(filteredIssues, content);
+            } catch (err) {
+                console.error("Error fetching issues:", err);
+                content.innerHTML = "<p style='text-align:center;'>Failed to load issues.</p>";
+            }
+        }
+
+        function displayIssues(issues, container) {
+            container.innerHTML = "";
+            issues.forEach((issue, index) => {
+                const div = document.createElement("div");
+                div.classList.add("container");
+                div.style.animationDelay = `${index * 0.1}s`; // staggered animation
+
+                div.innerHTML = `
+                    <div class="information">
+                        <img src="${issue.photo}" alt="Issue Photo">
+                        <section class="sec211">
+                            <div class="profile">🟢 ${issue.username || "Unknown User"}</div>
+                            <div class="alignment">
+                                <div class="details">
+                                    <div>📍 Location: ${issue.location}</div>
+                                    <div>📂 Category: ${issue.category}</div>
+                                    <div>🛠️ Issue: ${issue.issue}</div>
+                                </div>
+                                <div class="description"><b>Description:</b> ${issue.description}</div>
+                            </div>
+                        </section>
+                    </div>
+                    <div class="datetime">📅 ${issue.date}</div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function see1() {
+            window.location.href = "/registration";
+        }
+
+        document.addEventListener("DOMContentLoaded", () => see('all'));
+    </script>
+</body>
+</html>

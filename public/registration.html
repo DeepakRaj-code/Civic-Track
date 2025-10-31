@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CivicTrack | Registration</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+
+        body {
+            height: 100vh;
+            background: linear-gradient(135deg, #4e54c8, #8f94fb);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        h1 {
+            color: white;
+            margin-bottom: 40px;
+            letter-spacing: 1px;
+        }
+
+        .container {
+            display: flex;
+            gap: 60px;
+            opacity: 0;
+            animation: fadeIn 1.2s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .portal {
+            background: white;
+            width: 280px;
+            height: 380px;
+            border-radius: 20px;
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            padding: 25px 20px;
+            transition: 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .portal:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 0 35px rgba(0, 0, 0, 0.3);
+        }
+
+        .portal h2 {
+            font-size: 22px;
+            color: #4e54c8;
+            margin-bottom: 5px;
+        }
+
+        .portal p {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        .icon {
+            font-size: 60px;
+            color: #4e54c8;
+            margin: 10px 0;
+        }
+
+        .btn-container {
+            margin-top: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn {
+            background: #4e54c8;
+            color: white;
+            border: none;
+            padding: 10px 22px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            width: 120px;
+            transition: 0.2s;
+        }
+
+        .btn:hover {
+            background: #2b2f77;
+        }
+
+        /* Popup form styles */
+        .form-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .form-box {
+            background: #fff;
+            width: 340px;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+            animation: pop 0.3s ease;
+        }
+
+        @keyframes pop {
+            from {
+                transform: scale(0.7);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .form-box h3 {
+            margin-bottom: 20px;
+            color: #4e54c8;
+        }
+
+        .form-box input {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            outline: none;
+        }
+
+        .close-btn {
+            background: crimson;
+            color: white;
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Welcome to CivicTrack</h1>
+
+    <div class="container">
+        <!-- Admin Portal -->
+        <div class="portal">
+            <div>
+                <h2>Admin Portal</h2>
+                <div class="icon">🛡️</div>
+                <p>Manage reports, approve issues, and monitor civic improvements.</p>
+            </div>
+            <div class="btn-container">
+                <button class="btn" onclick="openForm('admin-login')">Login</button>
+            </div>
+        </div>
+
+        <!-- User Portal -->
+        <div class="portal">
+            <div>
+                <h2>User Portal</h2>
+                <div class="icon">👤</div>
+                <p>Report issues, upload photos, and track civic progress in your area.</p>
+            </div>
+            <div class="btn-container">
+                <button class="btn" onclick="openForm('user-signup')">Sign Up</button>
+                <button class="btn" onclick="openForm('user-login')">Sign In</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======= ADMIN LOGIN FORM ======= -->
+    <div class="form-container" id="admin-login">
+        <div class="form-box">
+            <h3>Admin Login</h3>
+            <form onsubmit="adminlogin(event)">
+                <input type="text" placeholder="Admin ID" required>
+                <input type="password" placeholder="Password" required>
+                <button class="btn">Login</button>
+            </form><br>
+            <button class="close-btn" onclick="closeForm('admin-login')">Close</button>
+        </div>
+    </div>
+
+    <!-- ======= USER SIGNUP FORM ======= -->
+    <div class="form-container" id="user-signup">
+        <div class="form-box">
+            <h3>User Sign Up</h3>
+            <form onsubmit="usersignup(event)">
+                <input type="text" placeholder="Full Name">
+                <input type="email" placeholder="Email">
+                <input type="password" placeholder="Password">
+                <input type="text" placeholder="City / Area">
+                <button class="btn">Register</button>
+            </form><br>
+            <button class="close-btn" onclick="closeForm('user-signup')">Close</button>
+        </div>
+    </div>
+
+    <!-- ======= USER LOGIN FORM ======= -->
+    <div class="form-container" id="user-login">
+        <div class="form-box">
+            <h3>User Sign In</h3>
+            <form onsubmit="userlogin(event)">
+                <input type="email" placeholder="Email">
+                <input type="password" placeholder="Password">
+                <button class="btn">Login</button><br>
+                <button class="close-btn" onclick="closeForm('user-login')">Close</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function openForm(id) {
+            document.getElementById(id).style.display = 'flex';
+        }
+        function closeForm(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+        async function usersignup(e) {
+            e.preventDefault();
+            const form = e.target;
+            const name = form[0].value;
+            const email = form[1].value;
+            const password = form[2].value;
+            const city = form[3].value;
+
+            const res = await fetch('/api/users/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ name, email, password, city })
+            });
+            const data = await res.json();
+            form.reset();
+            alert(data.message || data.error);
+            if (res.ok) {
+                localStorage.setItem("loggedInUser", JSON.stringify({ email }));
+                window.location.replace("/user");
+            }
+        }
+
+        async function userlogin(e) {
+            e.preventDefault();
+            const form = e.target;
+            const email = form[0].value;
+            const password = form[1].value;
+
+            const res = await fetch('/api/users/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email, password })
+            });
+            const data = await res.json();
+            form.reset();
+            alert(data.message || data.error);
+            if (res.ok) {
+                localStorage.setItem("loggedInUser", JSON.stringify({ email }));
+                window.location.replace("/user");
+            }
+        }
+
+        async function adminlogin(e) {
+            e.preventDefault();
+            const form = e.target;
+            const adminId = form[0].value;
+            const password = form[1].value;
+
+            const res = await fetch('/api/admins/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ adminId, password })
+            });
+            const data = await res.json();
+            form.reset();
+            alert(data.message || data.error);
+            if (res.ok) {
+                // For admin login
+                localStorage.setItem("loggedInAdmin", JSON.stringify({ adminId }));
+                window.location.replace("/admin");
+            }
+        }
+
+    </script>
+
+</body>
+
+</html>
