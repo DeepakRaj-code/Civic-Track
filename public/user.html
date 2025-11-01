@@ -5,6 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CivicTrack Dashboard</title>
+  <link rel="icon" href="/favicon.ico">
   <style>
     :root {
       --primary: #1e293b;
@@ -520,6 +521,7 @@
         const formData = new FormData(e.target);
         formData.set("emailid", loggedInUser.email);
         try {
+          console.log("form submitting....")
           const res = await fetch("/api/issues", { method: "POST", body: formData });
           const result = await res.json();
           alert(result.message || "Submitted successfully!");

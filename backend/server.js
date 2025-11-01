@@ -3,7 +3,6 @@ import mongoose from 'mongoose'
 import user from './models/user.js'
 import admin from './models/admin.js'
 import issue from './models/issues.js'
-import multer from 'multer'
 import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -14,20 +13,41 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 dotenv.config({ path: path.join(__dirname, ".env") });
+
+import { v2 as cloudinary } from "cloudinary";
+import { CloudinaryStorage } from "multer-storage-cloudinary";
+import multer from 'multer'
+
 const app = express()
 const port = 3000
+
+
+// ✅ Load full Cloudinary credentials from .env automatically
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+  secure: true
+});
+
+console.log("✅ Cloudinary Config:", {
+  cloud_name: cloudinary.config().cloud_name,
+  api_key: cloudinary.config().api_key ? "Loaded" : "Missing",
+  api_secret: cloudinary.config().api_secret ? "Loaded" : "Missing",
+});
 
 mongoose.connect(process.env.MONGO_URI).then(() => console.log('✅ Connected to MongoDB Atlas'))
   .catch(err => console.error('❌ MongoDB Connection Error:', err));
 
-const uploadDir = path.join(process.cwd(),"public", "uploads");
+const uploadDir = path.join(process.cwd(), "public", "uploads");
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir);
   console.log("📁 'uploads' folder created automatically");
 }
 
 app.use(express.json())
-app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, "public")));
+app.use("/uploads", express.static(path.join(__dirname, "public/uploads")));
 app.use(express.urlencoded({ extended: true }));
 
 app.use((req, res, next) => {
@@ -35,11 +55,31 @@ app.use((req, res, next) => {
   next();
 });
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, "public/uploads"),
-  filename: (req, file, cb) => cb(null, Date.now() + path.extname(file.originalname))
+const storage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: "CivicTrack_uploads",
+    resource_type: "auto",
+  },
 });
+cloudinary.api.ping()
+  .then(() => console.log("✅ Cloudinary connection successful"))
+  .catch(err => console.error("❌ Cloudinary ping failed:", err));
+
+
 const upload = multer({ storage });
+app.use((err, req, res, next) => {
+  if (err && err.name === "MulterError") {
+    console.error("❌ Multer Error:", err);
+    return res.status(500).json({ error: "File upload failed", details: err.message });
+  } else if (err) {
+    console.error("❌ Unexpected Error:", err);
+    return res.status(500).json({ error: "Unexpected server error", details: err.message || err });
+  }
+  next();
+});
+
+
 
 app.get('/', (req, res) => {
   res.sendFile('index.html', { root: 'public' })
@@ -102,18 +142,29 @@ app.post("/api/admins/login", async (req, res) => {
 
 app.post("/api/issues", upload.single("photo"), async (req, res) => {
   try {
+    console.log("✅ Issue submission request received");
+    console.log("Body:", req.body);
     if (!req.file) {
       return res.status(400).json({ error: "no file uploaded" })
     }
+    console.log("✅ Uploaded file details:", req.file);
+
+    const imageUrl = req.file.path || req.file.url || req.file.secure_url;
+
+    if (!imageUrl) {
+      console.error("❌ No Cloudinary URL found in req.file:", req.file);
+      return res.status(500).json({ error: "Cloudinary upload failed" });
+    }
+
     const newIssue = new issue({
-      photo: `/uploads/${req.file.filename}`,
+      photo: imageUrl,
       location: req.body.location,
       emailid: req.body.emailid,
       category: req.body.category,
       issue: req.body.issue,
       description: req.body.description,
       date: new Date().toLocaleDateString(),
-      status: "pending"
+      status: "pending",
     });
 
     await newIssue.save();
