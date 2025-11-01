@@ -379,24 +379,37 @@
     }
 
     async function adminlogin(e) {
-      e.preventDefault();
-      const form = e.target;
-      const adminId = form[0].value;
-      const password = form[1].value;
+  e.preventDefault();
+  const form = e.target;
+  const adminId = form[0].value;
+  const password = form[1].value;
 
-      const res = await fetch('/api/admins/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ adminId, password })
-      });
-      const data = await res.json();
-      form.reset();
-      alert(data.message || data.error);
-      if (res.ok) {
-        localStorage.setItem("loggedInAdmin", JSON.stringify({ adminId }));
-        window.location.replace("/admin");
-      }
+  try {
+    const res = await fetch("/api/admins/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ adminId, password }),
+    });
+
+    const data = await res.json();
+    form.reset();
+
+    if (res.ok && data.token) {
+      // ✅ Store both token and admin info securely
+      localStorage.setItem("adminToken", data.token);
+      localStorage.setItem("loggedInAdmin", JSON.stringify({ adminId }));
+
+      alert("Login successful!");
+      window.location.replace("/admin");
+    } else {
+      alert(data.error || "Login failed!");
     }
+  } catch (error) {
+    console.error("Login error:", error);
+    alert("Something went wrong while logging in!");
+  }
+}
+
   </script>
 </body>
 </html>

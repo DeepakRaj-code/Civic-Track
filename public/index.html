@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -40,8 +41,15 @@
         }
 
         @keyframes fadeDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         main {
@@ -51,8 +59,13 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
 
         /* Sidebar */
@@ -67,7 +80,7 @@
             gap: 1em;
             min-width: 200px;
             transition: 0.3s;
-            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
         }
 
         .sec1 button {
@@ -87,7 +100,7 @@
         .sec1 button:hover {
             background-color: #2563eb;
             transform: scale(1.05);
-            box-shadow: 0 0 12px rgba(59,130,246,0.5);
+            box-shadow: 0 0 12px rgba(59, 130, 246, 0.5);
         }
 
         /* Main Content */
@@ -102,7 +115,7 @@
         .container {
             background-color: var(--white);
             border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
             margin: 1.2em auto;
             padding: 1.2em;
             max-width: 1000px;
@@ -209,7 +222,8 @@
                 flex-direction: column;
             }
 
-            .details, .description {
+            .details,
+            .description {
                 width: 100%;
             }
         }
@@ -218,15 +232,18 @@
         ::-webkit-scrollbar {
             width: 8px;
         }
+
         ::-webkit-scrollbar-thumb {
             background: #cbd5e1;
             border-radius: 10px;
         }
+
         ::-webkit-scrollbar-thumb:hover {
             background: #94a3b8;
         }
+
         @media (max-width: 415px) {
-            .sec1 button{
+            .sec1 button {
                 font-size: 0.7rem;
             }
         }
@@ -251,24 +268,19 @@
     <script>
         async function see(type) {
             const content = document.getElementById("contentArea");
-            content.innerHTML = `<p style="text-align:center;">Loading ${type} issues...</p>`;
+            content.innerHTML = "<p style='text-align:center;'>Loading accepted posts...</p>";
             try {
-                const response = await fetch("/api/issues");
-                const issues = await response.json();
-
-                const filteredIssues = issues
-                    .filter(i => i.status === "accepted")
-                    .sort((a, b) => new Date(b.date) - new Date(a.date));
-
-                if (!filteredIssues.length) {
-                    content.innerHTML = `<p style="text-align:center;">No accepted posts found.</p>`;
+                const res = await fetch("/api/issues/accepted");
+                const data = await res.json();
+                const accepted = data.sort((a, b) => new Date(b.date) - new Date(a.date));
+                if (!accepted.length) {
+                    content.innerHTML = "<p style='text-align:center;'>No accepted posts found.</p>";
                     return;
                 }
-
-                displayIssues(filteredIssues, content);
-            } catch (err) {
-                console.error("Error fetching issues:", err);
-                content.innerHTML = "<p style='text-align:center;'>Failed to load issues.</p>";
+                content.innerHTML = "";
+                displayIssues(accepted, content);
+            } catch {
+                content.innerHTML = "<p style='text-align:center;'>Failed to load posts.</p>";
             }
         }
 
@@ -277,25 +289,25 @@
             issues.forEach((issue, index) => {
                 const div = document.createElement("div");
                 div.classList.add("container");
-                div.style.animationDelay = `${index * 0.1}s`; // staggered animation
+                div.style.animationDelay = `${index * 0.1}s`;
 
                 div.innerHTML = `
-                    <div class="information">
-                        <img src="${issue.photo}" alt="Issue Photo">
-                        <section class="sec211">
-                            <div class="profile">🟢 ${issue.username || "Unknown User"}</div>
-                            <div class="alignment">
-                                <div class="details">
-                                    <div>📍 Location: ${issue.location}</div>
-                                    <div>📂 Category: ${issue.category}</div>
-                                    <div>🛠️ Issue: ${issue.issue}</div>
-                                </div>
-                                <div class="description"><b>Description:</b> ${issue.description}</div>
+                <div class="information">
+                    <img src="${issue.photo}" alt="Issue Photo">
+                    <section class="sec211">
+                        <div class="profile">🟢 ${issue.username || "Unknown User"}</div>
+                        <div class="alignment">
+                            <div class="details">
+                                <div>📍 Location: ${issue.location}</div>
+                                <div>📂 Category: ${issue.category}</div>
+                                <div>🛠️ Issue: ${issue.issue}</div>
                             </div>
-                        </section>
-                    </div>
-                    <div class="datetime">📅 ${issue.date}</div>
-                `;
+                            <div class="description"><b>Description:</b> ${issue.description}</div>
+                        </div>
+                    </section>
+                </div>
+                <div class="datetime">📅 ${issue.date}</div>
+            `;
                 container.appendChild(div);
             });
         }
@@ -306,5 +318,7 @@
 
         document.addEventListener("DOMContentLoaded", () => see('all'));
     </script>
+
 </body>
+
 </html>

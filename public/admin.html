@@ -361,7 +361,7 @@
             <button onclick="see('rejected')">Rejected</button>
             <button onclick="see('all')">All Posts</button>
             <button onclick="see('searchUser')">Search Users</button>
-            <button class="logout" onclick="window.location.href='/registration'">Logout</button>
+            <button class="logout" onclick="logout()">Logout</button>
         </section>
 
         <section class="sec2" id="contentArea">
@@ -369,9 +369,28 @@
     </main>
 
     <script>
-        // ✅ Redirect if admin not logged in
-        if (!localStorage.getItem("loggedInAdmin")) {
+        // ✅ Secure Admin Access using JWT
+        const token = localStorage.getItem("adminToken");
+
+        if (!token) {
             window.location.replace("/registration");
+        } else {
+            // Verify token with backend
+            fetch("/api/admin/verify", {
+                headers: { Authorization: `Bearer ${token}` },
+            })
+                .then((res) => {
+                    if (!res.ok) throw new Error("Invalid or expired token");
+                })
+                .catch(() => {
+                    localStorage.removeItem("adminToken");
+                    window.location.replace("/registration");
+                });
+        }
+
+        function logout() {
+            localStorage.removeItem("adminToken");
+            window.location.href = "/registration";
         }
 
         // ✅ Disable back navigation
@@ -402,7 +421,11 @@
             const content = document.getElementById("contentArea");
             content.innerHTML = `<p style="text-align:center;">Loading ${type} issues...</p>`;
             try {
-                const response = await fetch("/api/issues");
+                const response = await fetch("/api/issues", {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+                    },
+                });
                 const issues = await response.json();
 
                 let filteredIssues = [];
@@ -466,7 +489,7 @@
             try {
                 const response = await fetch(`/api/issues/${id}/status`, {
                     method: "PATCH",
-                    headers: { "Content-Type": "application/json" },
+                    headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
                     body: JSON.stringify({ status: newStatus })
                 });
 
@@ -496,7 +519,11 @@
             resultsContainer.innerHTML = `<p style="text-align:center;">Searching for "${name}"...</p>`;
 
             try {
-                const response = await fetch(`/api/users/search?name=${encodeURIComponent(name)}`);
+                const response = await fetch(`/api/users/search?name=${encodeURIComponent(name)}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
                 const users = await response.json();
 
                 if (users.length === 0) {
@@ -633,6 +660,9 @@
 
             try {
                 const response = await fetch(`/api/users/${encodeURIComponent(email)}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
                     method: "DELETE"
                 });
                 const result = await response.json();
@@ -653,7 +683,11 @@
         // ✅ Load total users (optional API)
         async function loadTotalUsers() {
             try {
-                const response = await fetch("/api/users/count");
+                const response = await fetch("/api/users/count",{
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
                 const data = await response.json();
                 document.getElementById("totalUsers").textContent = `Total Users: ${data.count}`;
             } catch (err) {
