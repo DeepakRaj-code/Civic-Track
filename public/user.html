@@ -2,471 +2,536 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CivicTrack Dashboard</title>
-    <style>
-        :root {
-            --primary: #1e293b;
-            --secondary: #334155;
-            --accent: #3b82f6;
-            --bg: #f1f5f9;
-            --text: #111827;
-            --white: #fff;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CivicTrack Dashboard</title>
+  <style>
+    :root {
+      --primary: #1e293b;
+      --secondary: #334155;
+      --accent: #3b82f6;
+      --bg: #f1f5f9;
+      --text: #111827;
+      --white: #fff;
+    }
 
-        * {
-            box-sizing: border-box;
-        }
+    * {
+      box-sizing: border-box;
+    }
 
-        body {
-            margin: 0;
-            font-family: "Segoe UI", Roboto, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            overflow-x: hidden;
-        }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
 
-        header {
-            background-color: var(--primary);
-            color: var(--white);
-            text-align: center;
-            padding: 1em 0;
-            font-size: 1.5rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-            opacity: 0;
-            animation: fadeDown 1s ease forwards;
-        }
+    header {
+      background-color: var(--primary);
+      color: var(--white);
+      text-align: center;
+      padding: 1em 0;
+      font-size: 1.5rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      opacity: 0;
+      animation: fadeDown 1s ease forwards;
+    }
 
-        @keyframes fadeDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
+    @keyframes fadeDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
-        main {
-            display: flex;
-            height: calc(100vh - 70px);
-            animation: fadeIn 1.2s ease;
-        }
+    main {
+      display: flex;
+      height: calc(100vh - 70px);
+      animation: fadeIn 1.2s ease;
+    }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
 
-            to {
-                opacity: 1;
-            }
-        }
+      to {
+        opacity: 1;
+      }
+    }
 
-        /* Sidebar */
-        .sec1 {
-            position: relative;
-            flex: 1;
-            background-color: var(--secondary);
-            color: var(--white);
-            padding: 1em;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1em;
-            min-width: 220px;
-            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-        }
+    /* Sidebar */
+    .sec1 {
+      position: relative;
+      flex: 1;
+      background-color: var(--secondary);
+      color: var(--white);
+      padding: 1em;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1em;
+      min-width: 220px;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+      transition: all 0.4s ease;
+    }
 
-        .sec1 button {
-            width: 100%;
-            padding: 0.9em;
-            border: none;
-            border-radius: 6px;
-            font-size: 1rem;
-            font-weight: 500;
-            cursor: pointer;
-            background-color: var(--accent);
-            color: var(--white);
-            transition: all 0.3s ease;
-        }
+    .sec1 button {
+      width: 100%;
+      padding: 0.9em;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      background-color: var(--accent);
+      color: var(--white);
+      transition: all 0.3s ease;
+    }
 
-        .sec1 button:hover {
-            background-color: #2563eb;
-            transform: scale(1.05);
-            box-shadow: 0 0 12px rgba(59, 130, 246, 0.5);
-        }
+    .sec1 button:hover {
+      background-color: #2563eb;
+      transform: scale(1.05);
+      box-shadow: 0 0 12px rgba(59, 130, 246, 0.5);
+    }
 
-        .sec1 .logout {
-            position: absolute;
-            bottom: 5%;
-            background-color: #dc2626;
-            width: 90%;
-            padding: 0.9em;
-            border: none;
-            border-radius: 6px;
-            font-size: 1rem;
-            font-weight: 500;
-            cursor: pointer;
-            color: var(--white);
-            transition: all 0.3s ease;
-        }
+    .sec1 .logout {
+      position: absolute;
+      bottom: 5%;
+      background-color: #dc2626;
+      width: 90%;
+      padding: 0.9em;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      color: var(--white);
+      transition: all 0.3s ease;
+    }
 
-        .sec1 .logout:hover {
-            background-color: #b91c1c;
-        }
+    .sec1 .logout:hover {
+      background-color: #b91c1c;
+    }
 
-        /* Main Content */
-        .sec2 {
-            flex: 5;
-            background-color: var(--bg);
-            padding: 1.5em;
-            overflow-y: auto;
-        }
+    /* Main Content */
+    .sec2 {
+      flex: 5;
+      background-color: var(--bg);
+      padding: 1.5em;
+      overflow-y: auto;
+    }
 
-        h2 {
-            text-align: center;
-            color: var(--primary);
-        }
+    h2 {
+      text-align: center;
+      color: var(--primary);
+    }
 
-        /* Issue Cards */
-        .container {
-            background-color: var(--white);
-            border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-            margin: 1.2em auto;
-            padding: 1.2em;
-            max-width: 1000px;
-            opacity: 0;
-            transform: translateY(30px);
-            animation: slideUp 0.6s ease forwards;
-        }
+    /* Issue Cards */
+    .container {
+      background-color: var(--white);
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+      margin: 1.2em auto;
+      padding: 1.2em;
+      max-width: 1000px;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: slideUp 0.6s ease forwards;
+    }
 
-        @keyframes slideUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+    @keyframes slideUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
-        .information {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1em;
-        }
+    .information {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1em;
+    }
 
-        .information img {
-            width: 25%;
-            object-fit: cover;
-            border-radius: 8px;
-            flex-shrink: 0;
-        }
+    .information img {
+      width: 25%;
+      object-fit: cover;
+      border-radius: 8px;
+      flex-shrink: 0;
+    }
 
-        .sec211 {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 0.6em;
-        }
+    .sec211 {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6em;
+    }
 
-        .profile {
-            font-weight: bold;
-            color: var(--accent);
-        }
+    .profile {
+      font-weight: bold;
+      color: var(--accent);
+    }
 
-        .alignment {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            gap: 1em;
-        }
+    .alignment {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 1em;
+    }
 
-        .details {
-            flex: 1;
-            min-width: 220px;
-            word-break: break-word;
-            display: flex;
-            flex-direction: column;
-            gap: 0.5em;
-        }
+    .details {
+      flex: 1;
+      min-width: 220px;
+      word-break: break-word;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5em;
+    }
 
-        .description {
-            flex: 1;
-            background: #f8fafc;
-            padding: 0.8em;
-            border-radius: 6px;
-            font-size: 0.95rem;
-        }
+    .description {
+      flex: 1;
+      background: #f8fafc;
+      padding: 0.8em;
+      border-radius: 6px;
+      font-size: 0.95rem;
+    }
 
-        .datetime {
-            margin-top: 0.8em;
-            font-size: 0.9rem;
-            color: #6b7280;
-            text-align: right;
-        }
+    .datetime {
+      margin-top: 0.8em;
+      font-size: 0.9rem;
+      color: #6b7280;
+      text-align: right;
+    }
 
-        /* Filter Buttons */
-        .btn22 {
-            display: flex;
-            justify-content: center;
-            gap: 1em;
-            flex-wrap: wrap;
-            margin: 1em 0;
-        }
+    /* Filter Buttons */
+    .btn22 {
+      display: flex;
+      justify-content: center;
+      gap: 1em;
+      flex-wrap: wrap;
+      margin: 1em 0;
+    }
 
-        .btn22 button {
-            background-color: var(--secondary);
-            color: var(--white);
-            border: none;
-            padding: 0.8em 1.5em;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
+    .btn22 button {
+      background-color: var(--secondary);
+      color: var(--white);
+      border: none;
+      padding: 0.8em 1.5em;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
 
-        .btn22 button:hover {
-            background-color: var(--accent);
-            transform: translateY(-2px);
-        }
+    .btn22 button:hover {
+      background-color: var(--accent);
+      transform: translateY(-2px);
+    }
 
-        /* Add Post Form */
-        form {
-            background-color: var(--white);
-            padding: 2em;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            max-width: 600px;
-            margin: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 1em;
-        }
+    /* Add Post Form */
+    form {
+      background-color: var(--white);
+      padding: 2em;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      max-width: 600px;
+      margin: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1em;
+    }
 
-        label {
-            font-weight: 600;
-        }
+    label {
+      font-weight: 600;
+    }
 
-        input,
-        select,
-        textarea {
-            width: 100%;
-            padding: 0.6em;
-            border: 1px solid #cbd5e1;
-            border-radius: 6px;
-            font-size: 1rem;
-            outline: none;
-        }
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: 0.6em;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 1rem;
+      outline: none;
+    }
 
-        input:focus,
-        select:focus,
-        textarea:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
-        }
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+    }
 
-        input[type="submit"] {
-            background-color: var(--accent);
-            color: var(--white);
-            border: none;
-            cursor: pointer;
-            transition: 0.3s;
-        }
+    input[type="submit"] {
+      background-color: var(--accent);
+      color: var(--white);
+      border: none;
+      cursor: pointer;
+      transition: 0.3s;
+    }
 
-        input[type="submit"]:hover {
-            background-color: #2563eb;
-        }
+    input[type="submit"]:hover {
+      background-color: #2563eb;
+    }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            main {
-                flex-direction: column;
-            }
+    /* Responsive */
+    @media (max-width: 992px) {
+      .information img {
+        width: 40%;
+      }
+    }
 
-            .sec1 {
-                flex-direction: row;
-                justify-content: space-around;
-                min-width: 100%;
-            }
+    @media (max-width: 768px) {
+      main {
+        flex-direction: column;
+        height: auto;
+      }
 
-            .sec1 button {
-                width: 30%;
-            }
+      .sec1 {
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+        min-width: 100%;
+        padding: 0.8em;
+      }
 
-            .information img {
-                width: 100%;
-                height: auto;
-            }
+      .sec1 button {
+        width: 30%;
+        font-size: 0.9rem;
+      }
 
-            .alignment {
-                flex-direction: column;
-            }
+      .sec1 .logout {
+        position: relative;
+        width: 30%;
+        font-size: 0.9rem;
+        margin-top: 10px;
+      }
 
-            .details,
-            .description {
-                width: 100%;
-            }
-        }
+      .information img {
+        width: 100%;
+        height: auto;
+      }
 
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
+      .alignment {
+        flex-direction: column;
+      }
 
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 10px;
-        }
+      .details,
+      .description {
+        width: 100%;
+      }
+    }
 
-        ::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
-        }
-    </style>
+    @media (max-width: 600px) {
+      header {
+        font-size: 1.2rem;
+        padding: 0.8em 0;
+      }
+
+      .sec1 {
+        flex-wrap: wrap;
+        gap: 0.5em;
+      }
+
+      .sec1 button,
+      .sec1 .logout {
+        width: 45%;
+        font-size: 0.85rem;
+        padding: 0.7em;
+      }
+
+      .container {
+        padding: 1em;
+      }
+
+      .description {
+        font-size: 0.9rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .sec1 button,
+      .sec1 .logout {
+        width: 80%;
+      }
+
+      form {
+        padding: 1.2em;
+      }
+
+      input,
+      select,
+      textarea {
+        font-size: 0.9rem;
+      }
+
+      .btn22 button {
+        padding: 0.6em 1.2em;
+        font-size: 0.85rem;
+      }
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
 </head>
 
 <body>
-    <header>👋 Welcome to CivicTrack</header>
-    <main>
-        <section class="sec1">
-            <button onclick="see('all')">View All Posts</button>
-            <button onclick="see('submissions')">View Submissions</button>
-            <button onclick="see('add')">Add New Post</button>
-            <button class="logout" onclick="window.location.href='/registration'">Logout</button>
-        </section>
+  <header>👋 Welcome to CivicTrack</header>
+  <main>
+    <section class="sec1">
+      <button onclick="see('all')">View All Posts</button>
+      <button onclick="see('submissions')">View Submissions</button>
+      <button onclick="see('add')">Add New Post</button>
+      <button class="logout" onclick="window.location.href='/registration'">Logout</button>
+    </section>
 
-        <section class="sec2" id="contentArea">
-            <p style="text-align:center;">Loading posts...</p>
-        </section>
-    </main>
+    <section class="sec2" id="contentArea">
+      <p style="text-align:center;">Loading posts...</p>
+    </section>
+  </main>
 
-    <script>
-        let currentsection = `<div class="btn22">
-            <button onclick="loadUserIssues('accepted')">Accepted</button>
-            <button onclick="loadUserIssues('pending')">Pending</button>
-            <button onclick="loadUserIssues('rejected')">Rejected</button>
-          </div>`
-        const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
-        if (!loggedInUser) window.location.replace("/registration");
+  <script>
+    let currentsection = `<div class="btn22">
+      <button onclick="loadUserIssues('accepted')">Accepted</button>
+      <button onclick="loadUserIssues('pending')">Pending</button>
+      <button onclick="loadUserIssues('rejected')">Rejected</button>
+    </div>`;
 
-        async function see(type) {
-            const content = document.getElementById("contentArea");
-            if (type === "all") {
-                loadAcceptedPosts();
-            } else if (type === "submissions") {
-                content.innerHTML = `${currentsection}
-          <p style='text-align:center;'>Select a category to view your submissions.</p>
-        `;
-            } else {
-                content.innerHTML = `
-          <h2>Add New Post</h2>
-          <form id="issueform" enctype="multipart/form-data">
-            <label>Photo:</label>
-            <input type="file" name="photo" required>
-            <label>Location:</label>
-            <input type="text" name="location" placeholder="Enter location" required>
-            <label>Category:</label>
-            <select name="category" required>
-              <option value="">-- Select Category --</option>
-              <option value="sanitation">Sanitation</option>
-              <option value="road">Road Damage</option>
-              <option value="water">Water Leakage</option>
-              <option value="electricity">Electricity Issue</option>
-              <option value="garbage">Garbage</option>
-              <option value="pollution">Pollution</option>
-              <option value="other">Other</option>
-            </select>
-            <label>Issue Title:</label>
-            <input type="text" name="issue" placeholder="Short issue title" required>
-            <label>Description:</label>
-            <textarea name="description" placeholder="Describe briefly..." required></textarea>
-            <input type="submit" value="Submit">
-          </form>
-        `;
-                attachFormHandler();
-            }
+    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+    if (!loggedInUser) window.location.replace("/registration");
+
+    async function see(type) {
+      const content = document.getElementById("contentArea");
+      if (type === "all") {
+        loadAcceptedPosts();
+      } else if (type === "submissions") {
+        content.innerHTML = `${currentsection}
+        <p style='text-align:center;'>Select a category to view your submissions.</p>`;
+      } else {
+        content.innerHTML = `
+        <h2>Add New Post</h2>
+        <form id="issueform" enctype="multipart/form-data">
+          <label>Photo:</label>
+          <input type="file" name="photo" required>
+          <label>Location:</label>
+          <input type="text" name="location" placeholder="Enter location" required>
+          <label>Category:</label>
+          <select name="category" required>
+            <option value="">-- Select Category --</option>
+            <option value="sanitation">Sanitation</option>
+            <option value="road">Road Damage</option>
+            <option value="water">Water Leakage</option>
+            <option value="electricity">Electricity Issue</option>
+            <option value="garbage">Garbage</option>
+            <option value="pollution">Pollution</option>
+            <option value="other">Other</option>
+          </select>
+          <label>Issue Title:</label>
+          <input type="text" name="issue" placeholder="Short issue title" required>
+          <label>Description:</label>
+          <textarea name="description" placeholder="Describe briefly..." required></textarea>
+          <input type="submit" value="Submit">
+        </form>`;
+        attachFormHandler();
+      }
+    }
+
+    async function loadAcceptedPosts() {
+      const content = document.getElementById("contentArea");
+      content.innerHTML = "<p style='text-align:center;'>Loading accepted posts...</p>";
+      try {
+        const res = await fetch("/api/issues/accepted");
+        const data = await res.json();
+        const accepted = data.sort((a, b) => new Date(b.date) - new Date(a.date));
+        if (!accepted.length) {
+          content.innerHTML = "<p style='text-align:center;'>No accepted posts found.</p>";
+          return;
         }
+        content.innerHTML = "";
+        displayIssues(accepted, content);
+      } catch {
+        content.innerHTML = "<p style='text-align:center;'>Failed to load posts.</p>";
+      }
+    }
 
-        async function loadAcceptedPosts() {
-            const content = document.getElementById("contentArea");
-            content.innerHTML = "<p style='text-align:center;'>Loading accepted posts...</p>";
-            try {
-                const res = await fetch("/api/issues/accepted");
-                const data = await res.json();
-                const accepted = data.sort((a, b) => new Date(b.date) - new Date(a.date));
-                if (!accepted.length) {
-                    content.innerHTML = "<p style='text-align:center;'>No accepted posts found.</p>";
-                    return;
-                }
-                content.innerHTML = "";
-                displayIssues(accepted, content);
-            } catch {
-                content.innerHTML = "<p style='text-align:center;'>Failed to load posts.</p>";
-            }
+    async function loadUserIssues(status) {
+      const content = document.getElementById("contentArea");
+      content.innerHTML = "<p style='text-align:center;'>Loading your submissions...</p>";
+      try {
+        const res = await fetch(`/api/issues/user/${loggedInUser.email}?status=${status}`);
+        const issues = await res.json();
+        if (!issues.length) {
+          content.innerHTML = `${currentsection}<p style='text-align:center;'>No ${status} submissions yet.</p>`;
+          return;
         }
+        content.innerHTML = currentsection;
+        displayIssues(issues.sort((a, b) => new Date(b.date) - new Date(a.date)), content);
+      } catch {
+        content.innerHTML = `${currentsection}<p style='text-align:center;'>Failed to load.</p>`;
+      }
+    }
 
-        async function loadUserIssues(status) {
-            const content = document.getElementById("contentArea");
-            content.innerHTML = "<p style='text-align:center;'>Loading your submissions...</p>";
-            try {
-                const res = await fetch(`/api/issues/user/${loggedInUser.email}?status=${status}`);
-                const issues = await res.json();
-                if (!issues.length) {
-                    content.innerHTML = `${currentsection}<p style='text-align:center;'>No ${status} submissions yet.</p>`;
-                    return;
-                }
-                content.innerHTML = currentsection;
-                displayIssues(issues.sort((a, b) => new Date(b.date) - new Date(a.date)), content);
-            } catch {
-                content.innerHTML = `${currentsection}<p style='text-align:center;'>Failed to load.</p>`;
-            }
-        }
-
-        function displayIssues(issues, container) {
-            issues.forEach((issue, i) => {
-                const div = document.createElement("div");
-                div.classList.add("container");
-                div.style.animationDelay = `${i * 0.1}s`;
-                div.innerHTML = `
-          <div class="information">
-            <img src="${issue.photo}" alt="Issue Photo">
-            <section class="sec211">
-              <div class="profile">🟢 ${issue.username}</div>
-              <div class="alignment">
-                <div class="details">
-                  <div><b>📍 Location:</b> ${issue.location}</div>
-                  <div><b>📂 Category:</b> ${issue.category}</div>
-                  <div><b>🛠️ Issue:</b> ${issue.issue}</div>
-                </div>
-                <div class="description"><b>Description:</b> ${issue.description}</div>
+    function displayIssues(issues, container) {
+      issues.forEach((issue, i) => {
+        const div = document.createElement("div");
+        div.classList.add("container");
+        div.style.animationDelay = `${i * 0.1}s`;
+        div.innerHTML = `
+        <div class="information">
+          <img src="${issue.photo}" alt="Issue Photo">
+          <section class="sec211">
+            <div class="profile">🟢 ${issue.username}</div>
+            <div class="alignment">
+              <div class="details">
+                <div><b>📍 Location:</b> ${issue.location}</div>
+                <div><b>📂 Category:</b> ${issue.category}</div>
+                <div><b>🛠️ Issue:</b> ${issue.issue}</div>
               </div>
-            </section>
-          </div>
-          <div class="datetime">📅 ${issue.date}</div>
-        `;
-                container.appendChild(div);
-            });
-        }
+              <div class="description"><b>Description:</b> ${issue.description}</div>
+            </div>
+          </section>
+        </div>
+        <div class="datetime">📅 ${issue.date}</div>`;
+        container.appendChild(div);
+      });
+    }
 
-        function attachFormHandler() {
-            document.getElementById("issueform").addEventListener("submit", async (e) => {
-                e.preventDefault();
-                const formData = new FormData(e.target);
-                formData.set("emailid", loggedInUser.email);
-                try {
-                    const res = await fetch("/api/issues", { method: "POST", body: formData });
-                    const result = await res.json();
-                    alert(result.message || "Submitted successfully!");
-                    e.target.reset();
-                } catch {
-                    alert("Failed to submit issue.");
-                }
-            });
+    function attachFormHandler() {
+      document.getElementById("issueform").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        formData.set("emailid", loggedInUser.email);
+        try {
+          const res = await fetch("/api/issues", { method: "POST", body: formData });
+          const result = await res.json();
+          alert(result.message || "Submitted successfully!");
+          e.target.reset();
+        } catch {
+          alert("Failed to submit issue.");
         }
+      });
+    }
 
-        document.addEventListener("DOMContentLoaded", loadAcceptedPosts());
-    </script>
+    document.addEventListener("DOMContentLoaded", loadAcceptedPosts());
+  </script>
 </body>
 
 </html>
