@@ -8,6 +8,8 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 import fs from "fs";
+import { verifyAdmin } from "./middleware/authadmin.js";
+import jwt from "jsonwebtoken";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -130,11 +132,21 @@ app.post("/api/admins/login", async (req, res) => {
   try {
     const { adminId, password } = req.body;
     const admins = await admin.findOne({ adminId, password });
-    if (admins) {
-      res.json({ message: "Admin login successful!" });
-    } else {
-      res.status(401).json({ error: "Invalid admin credentials" });
+    if (!admins) {
+      return res.status(401).json({ error: "Invalid admin credentials" });
     }
+
+    // Generate JWT
+    const token = jwt.sign(
+      { id: admins._id, role: "admin" },
+      process.env.JWT_SECRET,
+      { expiresIn: process.env.JWT_EXPIRE || "1h" }
+    );
+    console.log(token)
+    res.json({
+      message: "Admin login successful!",
+      token, // send token to frontend
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -175,7 +187,7 @@ app.post("/api/issues", upload.single("photo"), async (req, res) => {
   }
 });
 
-app.get("/api/issues", async (req, res) => {
+app.get("/api/issues",verifyAdmin, async (req, res) => {
   try {
     const issues = await issue.find().sort({ _id: -1 });
 
@@ -285,7 +297,7 @@ app.get("/api/issues/accepted", async (req, res) => {
 
 
 // Update issue status by ID (admin)
-app.patch("/api/issues/:id/status", async (req, res) => {
+app.patch("/api/issues/:id/status",verifyAdmin, async (req, res) => {
   try {
     const { status } = req.body;
     const Issue = await issue.findByIdAndUpdate(
@@ -303,7 +315,7 @@ app.patch("/api/issues/:id/status", async (req, res) => {
 });
 
 // ✅ Get total number of users (for admin dashboard)
-app.get("/api/users/count", async (req, res) => {
+app.get("/api/users/count",verifyAdmin, async (req, res) => {
   try {
     const count = await user.countDocuments();
     res.json({ count });
@@ -314,7 +326,7 @@ app.get("/api/users/count", async (req, res) => {
 });
 
 // ✅ Search users by name (case-insensitive)
-app.get("/api/users/search", async (req, res) => {
+app.get("/api/users/search",verifyAdmin, async (req, res) => {
   try {
     const { name } = req.query;
     if (!name) return res.status(400).json({ message: "Name required" });
@@ -330,7 +342,7 @@ app.get("/api/users/search", async (req, res) => {
 });
 
 // ✅ Delete user and all their issues
-app.delete("/api/users/:email", async (req, res) => {
+app.delete("/api/users/:email",verifyAdmin, async (req, res) => {
   try {
     const { email } = req.params;
 
@@ -350,6 +362,18 @@ app.delete("/api/users/:email", async (req, res) => {
   }
 });
 
+app.get("/api/admin/verify",verifyAdmin, (req, res) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader) return res.status(401).json({ message: "No token provided" });
+
+  const token = authHeader.split(" ")[1];
+  try {
+    jwt.verify(token, process.env.JWT_SECRET);
+    res.json({ valid: true });
+  } catch {
+    res.status(403).json({ message: "Invalid or expired token" });
+  }
+});
 
 app.listen(port, () => {
   console.log(`Example app listening on port http://localhost:${port}`)
