@@ -38,8 +38,14 @@ console.log("✅ Cloudinary Config:", {
   api_secret: cloudinary.config().api_secret ? "Loaded" : "Missing",
 });
 
-mongoose.connect(process.env.MONGO_URI).then(() => console.log('✅ Connected to MongoDB Atlas'))
-  .catch(err => console.error('❌ MongoDB Connection Error:', err));
+mongoose
+  .connect(process.env.MONGO_URI, {
+    dbName: "civictrack"
+  })
+  .then(() => {
+    console.log("✅ Connected to MongoDB Atlas");
+  })
+  .catch(err => console.error("❌ MongoDB Connection Error:", err));
 
 const uploadDir = path.join(process.cwd(), "public", "uploads");
 if (!fs.existsSync(uploadDir)) {
